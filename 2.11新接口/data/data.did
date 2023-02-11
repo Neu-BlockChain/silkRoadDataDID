@@ -1,12 +1,48 @@
 type data = 
  service {
-   geAllAverageFieldData: (DataSource__1) -> (vec RESERVESContainField) query;
-   geAllFieldData: (DataSource__1) -> (vec RESERVESContainField) query;
-   getAverageFieldData: (GetFieldArgs) -> (opt RESERVESContainField) query;
-   getCertainAverageFieldData: (GetCertainFieldArgs) ->
+   getAllAverageFieldData: (DataSource__1) ->
+    (vec RESERVESContainField) query;
+   getAllAverageSumFieldData: () -> (vec SumRESERVESContainField) query;
+   getAllFieldData: (DataSource__1) -> (vec RESERVESContainField) query;
+   getAllSumFieldData: () -> (vec SumRESERVESContainField) query;
+   getAllSumSoc: () -> (vec SumRESERVES) query;
+   getAverageFieldData: (DataSource__1, nat, nat) ->
+    (opt RESERVESContainField) query;
+   getCertainFieldAverageData: (DataSource__1, nat, nat, text) ->
     (opt FieldReserve__1) query;
-   getCertainFieldData: (GetCertainFieldArgs) -> (opt FieldReserve__1) query;
-   getFieldData: (GetFieldArgs) -> (opt RESERVESContainField) query;
+   getCertainFieldData: (DataSource__1, nat, nat, text) ->
+    (opt FieldReserve__1) query;
+   getCertainRegionLevelSumSoc: (RegionLevel__1) -> (vec SumRESERVES) query;
+   getCertain_Id_Time_Field_sumAvergaeData: (nat, nat, text) ->
+    (opt text) query;
+   getCertain_Id_Time_Field_sumData: (nat, nat, text) -> (opt text) query;
+   getCertain_Id_Time_SumSoc: (nat, nat) -> (opt SumRESERVES) query;
+   getCertain_Id_Time_sumAverageFieldData: (nat, nat) ->
+    (opt SumRESERVESContainField) query;
+   getCertain_Id_Time_sumFieldData: (nat, nat) ->
+    (opt SumRESERVESContainField) query;
+   getCertain_RegionLevel_AverageFieldData: (DataSource__1,
+    RegionLevel__1) -> (vec RESERVESContainField) query;
+   getCertain_RegionLevel_FieldData: (DataSource__1, RegionLevel__1) ->
+    (vec RESERVESContainField) query;
+   getCertain_RegionLevel_Time_AverageFieldData: (DataSource__1,
+    RegionLevel__1, nat) -> (vec RESERVESContainField) query;
+   getCertain_RegionLevel_Time_FieldData: (DataSource__1, RegionLevel__1,
+    nat) -> (vec RESERVESContainField) query;
+   getCertain_RegionLevel_Time_SumSoc: (RegionLevel__1, nat) ->
+    (vec SumRESERVES) query;
+   getCertain_RegionLevel_Time_sumAverageFieldData: (RegionLevel__1, 
+    nat) -> (vec SumRESERVESContainField) query;
+   getCertain_RegionLevel_Time_sumFieldData: (RegionLevel__1, nat) ->
+    (vec SumRESERVESContainField) query;
+   getCertain_RegionLevel_sumAverageFiledData: (RegionLevel__1) ->
+    (vec SumRESERVESContainField) query;
+   getCertain_RegionLevel_sumFiledData: (RegionLevel__1) ->
+    (vec SumRESERVESContainField) query;
+   getCertanin_RegionLevel_AllData: (DataSource__1, RegionLevel__1) ->
+    (vec RESERVES) query;
+   getFieldData: (DataSource__1, nat, nat) ->
+    (opt RESERVESContainField) query;
    getIdToNameMap: () -> (vec record {
                                 nat;
                                 text;
@@ -15,17 +51,27 @@ type data =
                                 text;
                                 nat;
                               }) query;
-   getSomeTypeRegionAllData: (GetAllArgs) ->
-    (vec GetSomeTypeRegionAllDataReturn) query;
-   getSomeTypeSomeRegionSomeTimeCertainData: (GetCertainArgs) ->
-    (opt GetSomeTypeRegionAllDataReturn) query;
+   getSomeTypeSomeRegionSomeTimeCertainData: (DataSource__1, RegionLevel__1,
+    nat) -> (vec RESERVES) query;
    idToName: (nat) -> (opt text) query;
    nameToId: (text) -> (opt nat) query;
    uploadAverageFieldData: (UploadFieldArgs) -> (Result);
    uploadFieldData: (UploadFieldArgs) -> (Result);
    uploadSoilData: (UploadArgs) -> (Result);
-   uploadSumData: (UploadArgs) -> (Result);
+   uploadSumAvergaeFieldData: (SumRESERVESContainField) -> (Result);
+   uploadSumData: (UploadSumArgs) -> (Result);
+   uploadSumFieldData: (SumRESERVESContainField) -> (Result);
    uploadVegetationData: (UploadArgs) -> (Result);
+ };
+type UploadSumArgs = 
+ record {
+   id: nat;
+   name: text;
+   regionLevel: RegionLevel;
+   sumSoc: text;
+   upload_count: nat;
+   year_end: nat;
+   year_start: nat;
  };
 type UploadFieldArgs = 
  record {
@@ -50,10 +96,39 @@ type UploadArgs =
    year_end: nat;
    year_start: nat;
  };
+type SumRESERVESContainField = 
+ record {
+   fieldReserves: vec record {
+                        text;
+                        text;
+                      };
+   id: nat;
+   name: text;
+   regionLevel: RegionLevel;
+   upload_count: nat;
+   year_end: nat;
+   year_start: nat;
+ };
+type SumRESERVES = 
+ record {
+   id: nat;
+   name: text;
+   regionLevel: RegionLevel;
+   sumSoc: text;
+   upload_count: nat;
+   year_end: nat;
+   year_start: nat;
+ };
 type Result = 
  variant {
    err: Error;
    ok: bool;
+ };
+type RegionLevel__1 = 
+ variant {
+   City;
+   Country_and_Region;
+   Province;
  };
 type RegionLevel = 
  variant {
@@ -71,42 +146,17 @@ type RESERVESContainField =
    year_end: nat;
    year_start: nat;
  };
-type GetSomeTypeRegionAllDataReturn = 
+type RESERVES = 
  record {
    id: nat;
    name: text;
+   regionLevel: RegionLevel;
    soc_density_amount: text;
    soc_stock_amount: text;
    std_amount: text;
+   upload_count: nat;
    year_end: nat;
    year_start: nat;
- };
-type GetFieldArgs = 
- record {
-   dataSource: DataSource;
-   id: nat;
-   regionLevel: RegionLevel;
-   time: nat;
- };
-type GetCertainFieldArgs = 
- record {
-   dataSource: DataSource;
-   fieldName: text;
-   id: nat;
-   regionLevel: RegionLevel;
-   time: nat;
- };
-type GetCertainArgs = 
- record {
-   dataSource: DataSource;
-   id: nat;
-   regionLevel: RegionLevel;
-   time: nat;
- };
-type GetAllArgs = 
- record {
-   dataSource: DataSource;
-   regionLevel: RegionLevel;
  };
 type FieldReserve__1 = 
  record {
@@ -132,13 +182,11 @@ type Error =
 type DataSource__1 = 
  variant {
    Soil;
-   SumData;
    Vegetation;
  };
 type DataSource = 
  variant {
    Soil;
-   SumData;
    Vegetation;
  };
 service : () -> data

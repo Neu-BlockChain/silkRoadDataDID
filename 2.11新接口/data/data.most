@@ -39,6 +39,28 @@ type RESERVESContainField__1 = RESERVESContainField;
 type RESERVES__1 = RESERVES;
 type RegionLevel = {#City; #Country_and_Region; #Province};
 type Set<T> = Trie<T, ()>;
+type SumRESERVES =
+  {
+    id : Nat;
+    name : Text;
+    regionLevel : RegionLevel;
+    sumSoc : Text;
+    upload_count : Nat;
+    year_end : Nat;
+    year_start : Nat
+  };
+type SumRESERVESContainField =
+  {
+    fieldReserves : [(Text, Text)];
+    id : Nat;
+    name : Text;
+    regionLevel : RegionLevel;
+    upload_count : Nat;
+    year_end : Nat;
+    year_start : Nat
+  };
+type SumRESERVESContainField__1 = SumRESERVESContainField;
+type SumRESERVES__1 = SumRESERVES;
 type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
 actor {
   stable var averageSoilFieldDatas_count : Nat;
@@ -46,7 +68,7 @@ actor {
     [(Nat, Set<RESERVESContainField__1>)];
   stable var averageSumFieldDatas_count : Nat;
   stable var averageSumFieldDatas_entries :
-    [(Nat, Set<RESERVESContainField__1>)];
+    [(Nat, Set<SumRESERVESContainField__1>)];
   stable var averageVegetationFieldDatas_count : Nat;
   stable var averageVegetationFieldDatas_entries :
     [(Nat, Set<RESERVESContainField__1>)];
@@ -57,9 +79,9 @@ actor {
   stable var soilFieldDatas_count : Nat;
   stable var soilFieldDatas_entries : [(Nat, Set<RESERVESContainField__1>)];
   stable var sumDatas_count : Nat;
-  stable var sumDatas_entries : [(Nat, Set<RESERVES__1>)];
+  stable var sumDatas_entries : [(Nat, Set<SumRESERVES__1>)];
   stable var sumFieldDatas_count : Nat;
-  stable var sumFieldDatas_entries : [(Nat, Set<RESERVESContainField__1>)];
+  stable var sumFieldDatas_entries : [(Nat, Set<SumRESERVESContainField__1>)];
   stable var vegetationDatas_count : Nat;
   stable var vegetationDatas_entries : [(Nat, Set<RESERVES__1>)];
   stable var vegetationFieldDatas_count : Nat;

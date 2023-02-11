@@ -1,6 +1,5 @@
 export const idlFactory = ({ IDL }) => {
   const DataSource__1 = IDL.Variant({
-    'SumData' : IDL.Null,
     'Soil' : IDL.Null,
     'Vegetation' : IDL.Null,
   });
@@ -24,23 +23,23 @@ export const idlFactory = ({ IDL }) => {
     'regionLevel' : RegionLevel,
     'year_start' : IDL.Nat,
   });
-  const DataSource = IDL.Variant({
-    'SumData' : IDL.Null,
-    'Soil' : IDL.Null,
-    'Vegetation' : IDL.Null,
-  });
-  const GetFieldArgs = IDL.Record({
+  const SumRESERVESContainField = IDL.Record({
     'id' : IDL.Nat,
-    'dataSource' : DataSource,
-    'time' : IDL.Nat,
+    'year_end' : IDL.Nat,
+    'upload_count' : IDL.Nat,
+    'fieldReserves' : IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
+    'name' : IDL.Text,
     'regionLevel' : RegionLevel,
+    'year_start' : IDL.Nat,
   });
-  const GetCertainFieldArgs = IDL.Record({
+  const SumRESERVES = IDL.Record({
     'id' : IDL.Nat,
-    'dataSource' : DataSource,
-    'time' : IDL.Nat,
+    'year_end' : IDL.Nat,
+    'upload_count' : IDL.Nat,
+    'name' : IDL.Text,
     'regionLevel' : RegionLevel,
-    'fieldName' : IDL.Text,
+    'sumSoc' : IDL.Text,
+    'year_start' : IDL.Nat,
   });
   const FieldReserve__1 = IDL.Record({
     'soc_stock_amount' : IDL.Text,
@@ -48,24 +47,25 @@ export const idlFactory = ({ IDL }) => {
     'soc_density_amount' : IDL.Text,
     'fieldName' : IDL.Text,
   });
-  const GetAllArgs = IDL.Record({
-    'dataSource' : DataSource,
-    'regionLevel' : RegionLevel,
+  const RegionLevel__1 = IDL.Variant({
+    'City' : IDL.Null,
+    'Country_and_Region' : IDL.Null,
+    'Province' : IDL.Null,
   });
-  const GetSomeTypeRegionAllDataReturn = IDL.Record({
+  const RESERVES = IDL.Record({
     'id' : IDL.Nat,
     'year_end' : IDL.Nat,
+    'upload_count' : IDL.Nat,
     'name' : IDL.Text,
     'soc_stock_amount' : IDL.Text,
     'std_amount' : IDL.Text,
+    'regionLevel' : RegionLevel,
     'year_start' : IDL.Nat,
     'soc_density_amount' : IDL.Text,
   });
-  const GetCertainArgs = IDL.Record({
-    'id' : IDL.Nat,
-    'dataSource' : DataSource,
-    'time' : IDL.Nat,
-    'regionLevel' : RegionLevel,
+  const DataSource = IDL.Variant({
+    'Soil' : IDL.Null,
+    'Vegetation' : IDL.Null,
   });
   const UploadFieldArgs = IDL.Record({
     'id' : IDL.Nat,
@@ -95,34 +95,134 @@ export const idlFactory = ({ IDL }) => {
     'year_start' : IDL.Nat,
     'soc_density_amount' : IDL.Text,
   });
+  const UploadSumArgs = IDL.Record({
+    'id' : IDL.Nat,
+    'year_end' : IDL.Nat,
+    'upload_count' : IDL.Nat,
+    'name' : IDL.Text,
+    'regionLevel' : RegionLevel,
+    'sumSoc' : IDL.Text,
+    'year_start' : IDL.Nat,
+  });
   const data = IDL.Service({
-    'geAllAverageFieldData' : IDL.Func(
+    'getAllAverageFieldData' : IDL.Func(
         [DataSource__1],
         [IDL.Vec(RESERVESContainField)],
         ['query'],
       ),
-    'geAllFieldData' : IDL.Func(
+    'getAllAverageSumFieldData' : IDL.Func(
+        [],
+        [IDL.Vec(SumRESERVESContainField)],
+        ['query'],
+      ),
+    'getAllFieldData' : IDL.Func(
         [DataSource__1],
         [IDL.Vec(RESERVESContainField)],
         ['query'],
       ),
+    'getAllSumFieldData' : IDL.Func(
+        [],
+        [IDL.Vec(SumRESERVESContainField)],
+        ['query'],
+      ),
+    'getAllSumSoc' : IDL.Func([], [IDL.Vec(SumRESERVES)], ['query']),
     'getAverageFieldData' : IDL.Func(
-        [GetFieldArgs],
+        [DataSource__1, IDL.Nat, IDL.Nat],
         [IDL.Opt(RESERVESContainField)],
         ['query'],
       ),
-    'getCertainAverageFieldData' : IDL.Func(
-        [GetCertainFieldArgs],
+    'getCertainFieldAverageData' : IDL.Func(
+        [DataSource__1, IDL.Nat, IDL.Nat, IDL.Text],
         [IDL.Opt(FieldReserve__1)],
         ['query'],
       ),
     'getCertainFieldData' : IDL.Func(
-        [GetCertainFieldArgs],
+        [DataSource__1, IDL.Nat, IDL.Nat, IDL.Text],
         [IDL.Opt(FieldReserve__1)],
         ['query'],
       ),
+    'getCertainRegionLevelSumSoc' : IDL.Func(
+        [RegionLevel__1],
+        [IDL.Vec(SumRESERVES)],
+        ['query'],
+      ),
+    'getCertain_Id_Time_Field_sumAvergaeData' : IDL.Func(
+        [IDL.Nat, IDL.Nat, IDL.Text],
+        [IDL.Opt(IDL.Text)],
+        ['query'],
+      ),
+    'getCertain_Id_Time_Field_sumData' : IDL.Func(
+        [IDL.Nat, IDL.Nat, IDL.Text],
+        [IDL.Opt(IDL.Text)],
+        ['query'],
+      ),
+    'getCertain_Id_Time_SumSoc' : IDL.Func(
+        [IDL.Nat, IDL.Nat],
+        [IDL.Opt(SumRESERVES)],
+        ['query'],
+      ),
+    'getCertain_Id_Time_sumAverageFieldData' : IDL.Func(
+        [IDL.Nat, IDL.Nat],
+        [IDL.Opt(SumRESERVESContainField)],
+        ['query'],
+      ),
+    'getCertain_Id_Time_sumFieldData' : IDL.Func(
+        [IDL.Nat, IDL.Nat],
+        [IDL.Opt(SumRESERVESContainField)],
+        ['query'],
+      ),
+    'getCertain_RegionLevel_AverageFieldData' : IDL.Func(
+        [DataSource__1, RegionLevel__1],
+        [IDL.Vec(RESERVESContainField)],
+        ['query'],
+      ),
+    'getCertain_RegionLevel_FieldData' : IDL.Func(
+        [DataSource__1, RegionLevel__1],
+        [IDL.Vec(RESERVESContainField)],
+        ['query'],
+      ),
+    'getCertain_RegionLevel_Time_AverageFieldData' : IDL.Func(
+        [DataSource__1, RegionLevel__1, IDL.Nat],
+        [IDL.Vec(RESERVESContainField)],
+        ['query'],
+      ),
+    'getCertain_RegionLevel_Time_FieldData' : IDL.Func(
+        [DataSource__1, RegionLevel__1, IDL.Nat],
+        [IDL.Vec(RESERVESContainField)],
+        ['query'],
+      ),
+    'getCertain_RegionLevel_Time_SumSoc' : IDL.Func(
+        [RegionLevel__1, IDL.Nat],
+        [IDL.Vec(SumRESERVES)],
+        ['query'],
+      ),
+    'getCertain_RegionLevel_Time_sumAverageFieldData' : IDL.Func(
+        [RegionLevel__1, IDL.Nat],
+        [IDL.Vec(SumRESERVESContainField)],
+        ['query'],
+      ),
+    'getCertain_RegionLevel_Time_sumFieldData' : IDL.Func(
+        [RegionLevel__1, IDL.Nat],
+        [IDL.Vec(SumRESERVESContainField)],
+        ['query'],
+      ),
+    'getCertain_RegionLevel_sumAverageFiledData' : IDL.Func(
+        [RegionLevel__1],
+        [IDL.Vec(SumRESERVESContainField)],
+        ['query'],
+      ),
+    'getCertain_RegionLevel_sumFiledData' : IDL.Func(
+        [RegionLevel__1],
+        [IDL.Vec(SumRESERVESContainField)],
+        ['query'],
+      ),
+    'getCertanin_RegionLevel_AllData' : IDL.Func(
+        [DataSource__1, RegionLevel__1],
+        [IDL.Vec(RESERVES)],
+        ['query'],
+      ),
     'getFieldData' : IDL.Func(
-        [GetFieldArgs],
+        [DataSource__1, IDL.Nat, IDL.Nat],
         [IDL.Opt(RESERVESContainField)],
         ['query'],
       ),
@@ -136,14 +236,9 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(IDL.Tuple(IDL.Text, IDL.Nat))],
         ['query'],
       ),
-    'getSomeTypeRegionAllData' : IDL.Func(
-        [GetAllArgs],
-        [IDL.Vec(GetSomeTypeRegionAllDataReturn)],
-        ['query'],
-      ),
     'getSomeTypeSomeRegionSomeTimeCertainData' : IDL.Func(
-        [GetCertainArgs],
-        [IDL.Opt(GetSomeTypeRegionAllDataReturn)],
+        [DataSource__1, RegionLevel__1, IDL.Nat],
+        [IDL.Vec(RESERVES)],
         ['query'],
       ),
     'idToName' : IDL.Func([IDL.Nat], [IDL.Opt(IDL.Text)], ['query']),
@@ -151,7 +246,13 @@ export const idlFactory = ({ IDL }) => {
     'uploadAverageFieldData' : IDL.Func([UploadFieldArgs], [Result], []),
     'uploadFieldData' : IDL.Func([UploadFieldArgs], [Result], []),
     'uploadSoilData' : IDL.Func([UploadArgs], [Result], []),
-    'uploadSumData' : IDL.Func([UploadArgs], [Result], []),
+    'uploadSumAvergaeFieldData' : IDL.Func(
+        [SumRESERVESContainField],
+        [Result],
+        [],
+      ),
+    'uploadSumData' : IDL.Func([UploadSumArgs], [Result], []),
+    'uploadSumFieldData' : IDL.Func([SumRESERVESContainField], [Result], []),
     'uploadVegetationData' : IDL.Func([UploadArgs], [Result], []),
   });
   return data;
