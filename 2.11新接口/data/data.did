@@ -1,0 +1,144 @@
+type data = 
+ service {
+   geAllAverageFieldData: (DataSource__1) -> (vec RESERVESContainField) query;
+   geAllFieldData: (DataSource__1) -> (vec RESERVESContainField) query;
+   getAverageFieldData: (GetFieldArgs) -> (opt RESERVESContainField) query;
+   getCertainAverageFieldData: (GetCertainFieldArgs) ->
+    (opt FieldReserve__1) query;
+   getCertainFieldData: (GetCertainFieldArgs) -> (opt FieldReserve__1) query;
+   getFieldData: (GetFieldArgs) -> (opt RESERVESContainField) query;
+   getIdToNameMap: () -> (vec record {
+                                nat;
+                                text;
+                              }) query;
+   getNameToIdMap: () -> (vec record {
+                                text;
+                                nat;
+                              }) query;
+   getSomeTypeRegionAllData: (GetAllArgs) ->
+    (vec GetSomeTypeRegionAllDataReturn) query;
+   getSomeTypeSomeRegionSomeTimeCertainData: (GetCertainArgs) ->
+    (opt GetSomeTypeRegionAllDataReturn) query;
+   idToName: (nat) -> (opt text) query;
+   nameToId: (text) -> (opt nat) query;
+   uploadAverageFieldData: (UploadFieldArgs) -> (Result);
+   uploadFieldData: (UploadFieldArgs) -> (Result);
+   uploadSoilData: (UploadArgs) -> (Result);
+   uploadSumData: (UploadArgs) -> (Result);
+   uploadVegetationData: (UploadArgs) -> (Result);
+ };
+type UploadFieldArgs = 
+ record {
+   dataSource: DataSource;
+   fieldReserves: vec FieldReserve;
+   id: nat;
+   name: text;
+   regionLevel: RegionLevel;
+   upload_count: nat;
+   year_end: nat;
+   year_start: nat;
+ };
+type UploadArgs = 
+ record {
+   id: nat;
+   name: text;
+   regionLevel: RegionLevel;
+   soc_density_amount: text;
+   soc_stock_amount: text;
+   std_amount: text;
+   upload_count: nat;
+   year_end: nat;
+   year_start: nat;
+ };
+type Result = 
+ variant {
+   err: Error;
+   ok: bool;
+ };
+type RegionLevel = 
+ variant {
+   City;
+   Country_and_Region;
+   Province;
+ };
+type RESERVESContainField = 
+ record {
+   fieldReserves: vec FieldReserve;
+   id: nat;
+   name: text;
+   regionLevel: RegionLevel;
+   upload_count: nat;
+   year_end: nat;
+   year_start: nat;
+ };
+type GetSomeTypeRegionAllDataReturn = 
+ record {
+   id: nat;
+   name: text;
+   soc_density_amount: text;
+   soc_stock_amount: text;
+   std_amount: text;
+   year_end: nat;
+   year_start: nat;
+ };
+type GetFieldArgs = 
+ record {
+   dataSource: DataSource;
+   id: nat;
+   regionLevel: RegionLevel;
+   time: nat;
+ };
+type GetCertainFieldArgs = 
+ record {
+   dataSource: DataSource;
+   fieldName: text;
+   id: nat;
+   regionLevel: RegionLevel;
+   time: nat;
+ };
+type GetCertainArgs = 
+ record {
+   dataSource: DataSource;
+   id: nat;
+   regionLevel: RegionLevel;
+   time: nat;
+ };
+type GetAllArgs = 
+ record {
+   dataSource: DataSource;
+   regionLevel: RegionLevel;
+ };
+type FieldReserve__1 = 
+ record {
+   fieldName: text;
+   soc_density_amount: text;
+   soc_stock_amount: text;
+   std_amount: text;
+ };
+type FieldReserve = 
+ record {
+   fieldName: text;
+   soc_density_amount: text;
+   soc_stock_amount: text;
+   std_amount: text;
+ };
+type Error = 
+ variant {
+   AlreadyHaveThisReserve;
+   ReserveNotExist;
+   SomeThingWrong;
+   TimeError;
+ };
+type DataSource__1 = 
+ variant {
+   Soil;
+   SumData;
+   Vegetation;
+ };
+type DataSource = 
+ variant {
+   Soil;
+   SumData;
+   Vegetation;
+ };
+service : () -> data
