@@ -166,6 +166,7 @@ export interface data {
     [RegionLevel__1],
     Array<SumRESERVESContainField>,
   >,
+  'getCertain_Source_Data' : ActorMethod<[DataSource__1], Array<RESERVES>>,
   'getCertanin_RegionLevel_Data' : ActorMethod<
     [DataSource__1, RegionLevel__1],
     Array<RESERVES>,

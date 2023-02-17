@@ -42,6 +42,7 @@ type data =
     (vec SumRESERVESContainField) query;
    getCertain_RegionLevel_sumFiledData: (RegionLevel__1) ->
     (vec SumRESERVESContainField) query;
+   getCertain_Source_Data: (DataSource__1) -> (vec RESERVES) query;
    getCertanin_RegionLevel_Data: (DataSource__1, RegionLevel__1) ->
     (vec RESERVES) query;
    getFieldData: (DataSource__1, nat, nat) ->

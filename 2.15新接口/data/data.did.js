@@ -206,6 +206,11 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(SumRESERVESContainField)],
         ['query'],
       ),
+    'getCertain_Source_Data' : IDL.Func(
+        [DataSource__1],
+        [IDL.Vec(RESERVES)],
+        ['query'],
+      ),
     'getCertanin_RegionLevel_Data' : IDL.Func(
         [DataSource__1, RegionLevel__1],
         [IDL.Vec(RESERVES)],
